@@ -13,11 +13,17 @@ timer0: Timers.LiteX_Timer_32 @ {
     frequency: 100000000
     -> cpu@1001
 
+com: SPI.ComEc @ sysbus 0xE0005800
+    IRQ -> cpu@1004
+
 sram: Memory.MappedMemory @ {
         sysbus 0x10000000;
         sysbus 0x90000000 // shadow
     }
     size: 0x00020000
+
+commem: Memory.MappedMemory @ sysbus 0xD0000000
+    size: 0x6000
 
 ticktimer: Timers.TickTimer @ sysbus 0xe0005000
     periodInMs: 1

@@ -8,6 +8,8 @@ using sysbus
 
 # Add peripherals that are defined in C#.  You must restart Renode
 # if you modify these files.
+i @peripherals/com_ec.cs
+i @peripherals/com_soc.cs
 i @peripherals/keyboard.cs
 i @peripherals/LiteX_Timer_32.cs
 i @peripherals/memlcd.cs
@@ -28,7 +30,7 @@ showAnalyzer memlcd
 sysbus Tag <0xB0000000, 0xB0006000> "Framebuffer"
 
 # Silence COM messages
-sysbus SilenceRange <0xF000C000, 0xF000CFFF>
+#sysbus SilenceRange <0xF000C000, 0xF000CFFF>
 
 # Silence WDT
 sysbus SilenceRange <0xF001F000, 0xF001FFFF>
