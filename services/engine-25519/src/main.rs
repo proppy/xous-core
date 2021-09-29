@@ -1,5 +1,5 @@
-#![cfg_attr(target_os = "none", no_std)]
-#![cfg_attr(target_os = "none", no_main)]
+#![cfg_attr(any(target_os = "none", target_os = "xous"), no_std)]
+#![cfg_attr(any(target_os = "none", target_os = "xous"), no_main)]
 
 #![recursion_limit="512"]
 

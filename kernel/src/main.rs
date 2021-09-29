@@ -3,6 +3,8 @@
 
 #![cfg_attr(baremetal, no_main)]
 #![cfg_attr(baremetal, no_std)]
+#![no_std]
+#![no_main]
 
 #[cfg(baremetal)]
 #[macro_use]

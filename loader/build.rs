@@ -18,10 +18,11 @@ fn main() {
         println!("cargo:rustc-link-lib=static={}", name);
         println!("cargo:rustc-link-search={}", out_dir.display());
         println!("cargo:rerun-if-changed=bin/{}.a", target);
+        println!("cargo:rustc-link-arg-bins=-Tlink-kernel.x");
     }
 
     // Put the linker script somewhere the linker can find it
-    fs::File::create(out_dir.join("link.x"))
+    fs::File::create(out_dir.join("link-kernel.x"))
         .unwrap()
         .write_all(include_bytes!("link.x"))
         .unwrap();

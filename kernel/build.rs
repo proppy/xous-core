@@ -22,6 +22,7 @@ fn main() {
         println!("cargo:rustc-cfg=baremetal");
     } else {
         println!("Target {} is NOT bare metal", target);
+        panic!("Halp");
     }
 
     // For RISC-V, link in the startup library.
