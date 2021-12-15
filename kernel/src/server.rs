@@ -1034,12 +1034,12 @@ impl Server {
             xous_kernel::Message::Move(msg) => {
                 let offset = msg.offset.map(|x| x.get()).unwrap_or(0) as usize;
                 let valid = msg.valid.map(|x| x.get()).unwrap_or(0) as usize;
-                /*if offset >= msg.buf.len() {
+                if offset >= msg.buf.len() {
                     return Err(xous_kernel::Error::BadAddress);
                 }
                 if valid + offset > msg.buf.len() {
                     return Err(xous_kernel::Error::BadAddress);
-                }*/
+                }
                 QueuedMessage::MemoryMessageSend(
                     pid.get() as _,
                     tid as _,
@@ -1055,12 +1055,13 @@ impl Server {
             xous_kernel::Message::MutableBorrow(msg) => {
                 let offset = msg.offset.map(|x| x.get()).unwrap_or(0) as usize;
                 let valid = msg.valid.map(|x| x.get()).unwrap_or(0) as usize;
-                /*if offset >= msg.buf.len() {
+                print!("offset/valid/len: {}, {}, {}", offset, valid, msg.buf.len());
+                if offset >= msg.buf.len() {
                     return Err(xous_kernel::Error::BadAddress);
                 }
                 if valid + offset > msg.buf.len() {
                     return Err(xous_kernel::Error::BadAddress);
-                }*/
+                }
                 QueuedMessage::MemoryMessageRWLend(
                     pid.get() as _,
                     tid as _,
@@ -1076,12 +1077,12 @@ impl Server {
             xous_kernel::Message::Borrow(msg) => {
                 let offset = msg.offset.map(|x| x.get()).unwrap_or(0) as usize;
                 let valid = msg.valid.map(|x| x.get()).unwrap_or(0) as usize;
-                /*if offset >= msg.buf.len() {
+                if offset >= msg.buf.len() {
                     return Err(xous_kernel::Error::BadAddress);
                 }
                 if valid + offset > msg.buf.len() {
                     return Err(xous_kernel::Error::BadAddress);
-                }*/
+                }
                 QueuedMessage::MemoryMessageROLend(
                     pid.get() as _,
                     tid as _,
