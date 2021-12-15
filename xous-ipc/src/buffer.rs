@@ -48,7 +48,7 @@ impl<'a> Buffer<'a> {
         .expect("Buffer: error in new()/map_memory");
 
         let valid =
-            unsafe { MemoryRange::new(new_mem.as_mut_ptr() as usize, len + remainder).unwrap() };
+            unsafe { MemoryRange::new(new_mem.as_mut_ptr() as usize, len).unwrap() };
         Buffer {
             range: new_mem,
             slice: unsafe {
