@@ -67,7 +67,7 @@ impl XousNames {
         let mut buf = Buffer::into_buf(registration).or(Err(xous::Error::InternalError))?;
 
         buf.lend_mut(self.conn, api::Opcode::Register.to_u32().unwrap())
-            .or(Err(xous::Error::InternalError))?;
+            .or(Err(xous::Error::BadAddress))?;
 
         match buf.to_original().unwrap() {
             api::Return::SID(sid_raw) => {
@@ -75,7 +75,10 @@ impl XousNames {
                 xous::create_server_with_sid(sid).expect("can't auto-register server");
                 Ok(sid)
             }
-            api::Return::Failure => Err(xous::Error::InternalError),
+            api::Return::Failure => {
+                log::warn!("Name registration API failure");
+                Err(xous::Error::InternalError)
+            },
             _ => unimplemented!("unimplemented return codes"),
         }
     }

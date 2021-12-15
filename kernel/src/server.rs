@@ -1031,39 +1031,69 @@ impl Server {
                 msg.arg3,
                 msg.arg4,
             ),
-            xous_kernel::Message::Move(msg) => QueuedMessage::MemoryMessageSend(
-                pid.get() as _,
-                tid as _,
-                self.tail_generation,
-                original_address.map(|x| x.get()).unwrap_or(0),
-                msg.id,
-                msg.buf.as_ptr() as _,
-                msg.buf.len(),
-                msg.offset.map(|x| x.get()).unwrap_or(0) as usize,
-                msg.valid.map(|x| x.get()).unwrap_or(0) as usize,
-            ),
-            xous_kernel::Message::MutableBorrow(msg) => QueuedMessage::MemoryMessageRWLend(
-                pid.get() as _,
-                tid as _,
-                self.tail_generation,
-                original_address.map(|x| x.get()).unwrap_or(0),
-                msg.id,
-                msg.buf.as_ptr() as _,
-                msg.buf.len(),
-                msg.offset.map(|x| x.get()).unwrap_or(0) as usize,
-                msg.valid.map(|x| x.get()).unwrap_or(0) as usize,
-            ),
-            xous_kernel::Message::Borrow(msg) => QueuedMessage::MemoryMessageROLend(
-                pid.get() as _,
-                tid as _,
-                self.tail_generation,
-                original_address.map(|x| x.get()).unwrap_or(0),
-                msg.id,
-                msg.buf.as_ptr() as _,
-                msg.buf.len(),
-                msg.offset.map(|x| x.get()).unwrap_or(0) as usize,
-                msg.valid.map(|x| x.get()).unwrap_or(0) as usize,
-            ),
+            xous_kernel::Message::Move(msg) => {
+                let offset = msg.offset.map(|x| x.get()).unwrap_or(0) as usize;
+                let valid = msg.valid.map(|x| x.get()).unwrap_or(0) as usize;
+                /*if offset >= msg.buf.len() {
+                    return Err(xous_kernel::Error::BadAddress);
+                }
+                if valid + offset > msg.buf.len() {
+                    return Err(xous_kernel::Error::BadAddress);
+                }*/
+                QueuedMessage::MemoryMessageSend(
+                    pid.get() as _,
+                    tid as _,
+                    self.tail_generation,
+                    original_address.map(|x| x.get()).unwrap_or(0),
+                    msg.id,
+                    msg.buf.as_ptr() as _,
+                    msg.buf.len(),
+                    offset,
+                    valid,
+                )
+            },
+            xous_kernel::Message::MutableBorrow(msg) => {
+                let offset = msg.offset.map(|x| x.get()).unwrap_or(0) as usize;
+                let valid = msg.valid.map(|x| x.get()).unwrap_or(0) as usize;
+                /*if offset >= msg.buf.len() {
+                    return Err(xous_kernel::Error::BadAddress);
+                }
+                if valid + offset > msg.buf.len() {
+                    return Err(xous_kernel::Error::BadAddress);
+                }*/
+                QueuedMessage::MemoryMessageRWLend(
+                    pid.get() as _,
+                    tid as _,
+                    self.tail_generation,
+                    original_address.map(|x| x.get()).unwrap_or(0),
+                    msg.id,
+                    msg.buf.as_ptr() as _,
+                    msg.buf.len(),
+                    offset,
+                    valid,
+                )
+            },
+            xous_kernel::Message::Borrow(msg) => {
+                let offset = msg.offset.map(|x| x.get()).unwrap_or(0) as usize;
+                let valid = msg.valid.map(|x| x.get()).unwrap_or(0) as usize;
+                /*if offset >= msg.buf.len() {
+                    return Err(xous_kernel::Error::BadAddress);
+                }
+                if valid + offset > msg.buf.len() {
+                    return Err(xous_kernel::Error::BadAddress);
+                }*/
+                QueuedMessage::MemoryMessageROLend(
+                    pid.get() as _,
+                    tid as _,
+                    self.tail_generation,
+                    original_address.map(|x| x.get()).unwrap_or(0),
+                    msg.id,
+                    msg.buf.as_ptr() as _,
+                    msg.buf.len(),
+                    offset,
+                    valid,
+                )
+            },
         };
 
         // Advance the tail generation, which is used for incoming messages to keep
